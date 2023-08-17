@@ -4,10 +4,13 @@
 \alias{format_watertracker}
 \title{Format Water Tracker data}
 \usage{
-format_watertracker(df, wetthreshold = 50, obsthreshold = 80)
+format_watertracker(df, unitID = "Name", wetthreshold = 50, obsthreshold = 80)
 }
 \arguments{
 \item{df}{Input data frame from water tracker}
+
+\item{unitID}{Character string for the field containing the management units
+for which hydrological data will be evaluated}
 
 \item{wetthreshold}{Threshold applied to proportion open water for
 considering a wetland unit to be flooded}
@@ -16,7 +19,8 @@ considering a wetland unit to be flooded}
 including water tracker data}
 }
 \value{
-tibble with added fields year, month, wateryear, month_name, status, midpoint
+tibble with added fields year, month, wateryear, month_name, status,
+midpoint
 }
 \description{
 Format Water Tracker data
