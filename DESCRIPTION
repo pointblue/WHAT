@@ -1,10 +1,14 @@
 Package: WHAT
-Title: What the Package Does (One Line, Title Case)
+Title: Wetland Hydrological Analysis Tool
 Version: 0.0.0.9000
 Authors@R: 
     person("Kristen", "Dybala", , "kdybala@pointblue.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2787-4600"))
-Description: What the package does (one paragraph).
+Description: Supports analysis of near real-time hydrological data from
+    Point Blue's [Water Tracker](https://www.pointblue.org/watertracker)
+    to summarize the timing of operational modes relevant to water use in
+    managed wetland units, such as flood-up, maintenance of full ponds,
+    draw-down, irrigation, or no water supply.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
