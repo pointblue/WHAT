@@ -1,14 +1,10 @@
 #' Format Water Tracker data
 #'
 #' @param df Input data frame from water tracker
-#' @param wetthreshold Threshold applied to proportion open water for
-#'   considering a wetland unit to be flooded
-#' @param obsthreshold Threshold applied to the proportion observed for
-#'   including water tracker data
 #' @param unitID Character string for the field containing the management units
 #'   for which hydrological data will be evaluated
 #'
-#' @return tibble with added fields year, month, wateryear, month_name, status,
+#' @return tibble with added fields unit, year, month, wateryear, month_name,
 #'   midpoint
 #' @export
 #' @importFrom rlang .data
@@ -16,8 +12,7 @@
 #' @examples
 #' # format_watertracker(df)
 #'
-format_watertracker = function(df, unitID = 'Name', wetthreshold = 50,
-                               obsthreshold = 80) {
+format_watertracker = function(df, unitID = 'Name') {
   df |>
     # find mosaic midpoint
     dplyr::rowwise() |>
@@ -33,10 +28,5 @@ format_watertracker = function(df, unitID = 'Name', wetthreshold = 50,
                     factor(levels = c('Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar',
                                       'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'))
     ) |>
-    # interpret flooding status as management mode on each scene date
-    dplyr::mutate(
-      status = dplyr::if_else(.data$PercentWater > wetthreshold, 'wet', 'dry'),
-      status = dplyr::if_else(.data$PercentObserved < obsthreshold,
-                              NA, .data$status)) |>
-    dplyr::select(unit = unitID, .data$year:.data$status, dplyr::everything())
+    dplyr::select(unit = unitID, .data$year:.data$month_name, dplyr::everything())
 }
