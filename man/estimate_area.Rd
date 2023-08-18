@@ -4,16 +4,26 @@
 \alias{estimate_area}
 \title{Estimate area}
 \usage{
-estimate_area(df)
+estimate_area(df, groupby = "unit")
 }
 \arguments{
 \item{df}{tibble resulting from \code{\link[=format_watertracker]{format_watertracker()}}}
+
+\item{groupby}{Character string for the field by which area should be
+estimated}
 }
 \value{
 tibble with additional field "area_ac"
 }
 \description{
-Estimate area
+Estimate the area of each wetland management unit from the area observed in
+the Water Tracker data.
+}
+\details{
+This function converts the "ObservedArea" field (m^2) in the
+original Water Tracker output data to an estimate of the total area of each
+management unit, in acres. The area is estimated as the maximum of all
+ObservedArea values with the same grouping ID, which by default is "unit".
 }
 \examples{
 #estimate_area(df)
