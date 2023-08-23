@@ -19,3 +19,6 @@ BugReports: https://github.com/pointblue/WHAT/issues
 Imports: 
     dplyr,
     rlang
+Depends: 
+    R (>= 2.10)
+LazyData: true
