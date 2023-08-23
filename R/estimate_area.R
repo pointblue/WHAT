@@ -15,7 +15,7 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' #estimate_area(df)
+#' format_watertracker(sampledat) |> estimate_area()
 estimate_area = function(df) {
   df |>
     dplyr::group_by(.data$unit) |>

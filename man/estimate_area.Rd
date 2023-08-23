@@ -23,5 +23,5 @@ management unit, in acres. The area is estimated as the maximum of all
 ObservedArea values with the unit name.
 }
 \examples{
-#estimate_area(df)
+format_watertracker(sampledat) |> estimate_area()
 }

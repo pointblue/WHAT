@@ -63,5 +63,5 @@ combinations will result in \code{mode = "UNKNOWN"} and should be manually
 inspected.
 }
 \examples{
-# interpret_modes(df)
+format_watertracker(sampledat) |> estimate_area() |> interpret_modes()
 }

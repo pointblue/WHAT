@@ -10,7 +10,7 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' # format_watertracker(df)
+#' format_watertracker(sampledat)
 #'
 format_watertracker = function(df, unitID = 'Name') {
   df |>

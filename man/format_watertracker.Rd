@@ -20,6 +20,6 @@ midpoint
 Format Water Tracker data
 }
 \examples{
-# format_watertracker(df)
+format_watertracker(sampledat)
 
 }

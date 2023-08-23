@@ -49,7 +49,7 @@
 #' @export
 #'
 #' @examples
-#' # interpret_modes(df)
+#' format_watertracker(sampledat) |> estimate_area() |> interpret_modes()
 interpret_modes = function(df, wetmode = 'M', wetthreshold = 50, obsthreshold = 80) {
 
   df |>
@@ -59,7 +59,8 @@ interpret_modes = function(df, wetmode = 'M', wetthreshold = 50, obsthreshold = 
       status = dplyr::if_else(.data$PercentObserved < obsthreshold,
                               NA, .data$status)) |>
     # interpret set of flooding status in each month
-    dplyr::group_by(.data$unit, .data$area_ac, .data$wateryear, .data$month_name) |>
+    dplyr::group_by(.data$unit, .data$area_ac, .data$wateryear, .data$month,
+                    .data$month_name) |>
     dplyr::summarize(
       mode = dplyr::case_when(
         all(.data$status == 'wet') ~ wetmode, #maintenance or hold,
