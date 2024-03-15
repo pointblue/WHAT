@@ -19,8 +19,8 @@ add_date_details = function(df) {
       month_name = format(.data$obsdate, '%b') |>
         factor(levels = c('Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr',
                           'May', 'Jun', 'Jul', 'Aug', 'Sep'))) |>
-    dplyr::select(.data$wateryear, .data$month, .data$month_name, .data$year,
-                  .data$obsdate, dplyr::everything())
+    dplyr::select("wateryear", "month", "month_name", "year", "obsdate",
+                  dplyr::everything())
 
   if (any(is.na(res$wateryear))) {
     warning('Warning: Dates are missing in some rows.')
