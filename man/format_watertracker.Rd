@@ -4,22 +4,38 @@
 \alias{format_watertracker}
 \title{Format Water Tracker data}
 \usage{
-format_watertracker(df, unitID = "Name")
+format_watertracker(df, unitID = "MU")
 }
 \arguments{
 \item{df}{Input data frame from water tracker}
 
-\item{unitID}{Character string for the field containing the management units
-for which hydrological data will be evaluated}
+\item{unitID}{Character string for the field containing unique values for
+each of the management units for which hydrological data will be evaluated;
+default is "MU"}
 }
 \value{
-tibble with added fields unit, year, month, wateryear, month_name,
-midpoint
+tibble with added fields unit, wateryear, year, month, month_name
 }
 \description{
-Format Water Tracker data
+Estimates the observation date associated with each image mosaic and assigns
+corresponding values for year, water year, and month.
+}
+\details{
+For each unique wetland management unit, identifies and removes
+likely pseudoreplicate data from sequential observations with identical
+values that may represent the same image in multiple mosaics. Estimates the
+actual observation date as the midpoint between mosaic start and end dates,
+unless the next observation is a likely pseudoreplicate, in which case the
+date is estimated as the midpoint of the overlapping date range between the
+two observations. Also recalculate PercentWater as ObservedAreaWaterHa /
+ObservedAreaHa * 100 (to ensure none are >100\%).
+
+Wrapper function for \code{\link[=find_duplicates]{find_duplicates()}}, \code{\link[=estimate_obsdate]{estimate_obsdate()}}, and
+\code{\link[=add_date_details]{add_date_details()}}. Expects standard output from Water Tracker data with
+fields MosaicDateStart, MosaicDateEnd, ObservedAreaHa, and PercentWater.
 }
 \examples{
+data(sampledat)
 format_watertracker(sampledat)
 
 }
