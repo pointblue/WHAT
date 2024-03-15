@@ -55,17 +55,20 @@ estimate_floodstatus = function(df, prob, delta,
     purrr::map_df(
       function(x) {
         x |>
-          filter(ObservedPixels > 0) |> #drop dates with no data
+          dplyr::filter(.data$ObservedPixels > 0) |> #drop dates with no data
           dplyr::mutate(
-            ObservedAreaWaterHa_pq = quantile(.data$ObservedAreaWaterHa, prob, na.rm = TRUE),
+            ObservedAreaWaterHa_pq = stats::quantile(.data$ObservedAreaWaterHa, prob, na.rm = TRUE),
             # change from previous observation in that unit
-            ObservedAreaWater_adjust = if_else(ObservedAreaWaterHa > ObservedAreaWaterHa_pq, ObservedAreaWaterHa_pq, ObservedAreaWaterHa),
-            flood_delta = (.data$ObservedAreaWater_adjust - lag(.data$ObservedAreaWater_adjust, 1))/.data$ObservedAreaWaterHa_pq,
-            flood_trend = case_when(flood_delta <= -delta ~ '-',
-                                    flood_delta < 0 ~ '(-)',
-                                    flood_delta >= delta ~ '+',
-                                    flood_delta > 0 ~ '(+)',
-                                    TRUE ~ '0'))
+            ObservedAreaWater_adjust = dplyr::if_else(
+              .data$ObservedAreaWaterHa > .data$ObservedAreaWaterHa_pq,
+              .data$ObservedAreaWaterHa_pq,
+              .data$ObservedAreaWaterHa),
+            flood_delta = (.data$ObservedAreaWater_adjust - dplyr::lag(.data$ObservedAreaWater_adjust, 1))/.data$ObservedAreaWaterHa_pq,
+            flood_trend = dplyr::case_when(flood_delta <= -delta ~ '-',
+                                           flood_delta < 0 ~ '(-)',
+                                           flood_delta >= delta ~ '+',
+                                           flood_delta > 0 ~ '(+)',
+                                           TRUE ~ '0'))
       }) |>
     dplyr::mutate(
       flood_prop = .data$ObservedAreaWater_adjust/.data$ObservedAreaWaterHa_pq,

@@ -56,6 +56,8 @@
 #'
 #' @return tibble with additional field "mode"
 #' @importFrom rlang .data
+#' @importFrom tidyr complete
+#' @importFrom tidyr nesting
 
 estimate_wetlandmode = function(df, fullmode) {
 
@@ -63,10 +65,10 @@ estimate_wetlandmode = function(df, fullmode) {
   firstfull = df |>
     dplyr::arrange(.data$unit, .data$obsdate) |> # order matters!
     dplyr::group_by(.data$unit, .data$wateryear) |>
-    filter(.data$flood_status == 'full') |>
-    slice(1) |>
+    dplyr::filter(.data$flood_status == 'full') |>
+    dplyr::slice(1) |>
     dplyr::ungroup() |>
-    dplyr::select(wateryear, obsdate, unit) |>
+    dplyr::select("wateryear", "obsdate", "unit") |>
     dplyr::mutate(modefirst = fullmode)
 
 
@@ -78,10 +80,10 @@ estimate_wetlandmode = function(df, fullmode) {
     # first recode brief gaps in full flooding as full
     dplyr::group_by(.data$unit) |>
     dplyr::mutate(
-      month_status = case_when(
+      month_status = dplyr::case_when(
         .data$flood_status != 'full' &
-          lead(.data$flood_status) == 'full' &
-          lag(.data$flood_status) == 'full' ~ 'full',
+          dplyr::lead(.data$flood_status) == 'full' &
+          dplyr::lag(.data$flood_status) == 'full' ~ 'full',
         TRUE ~ flood_status)
       ) |>
     # SUMMARIZE STRAIGHTFORWARD MONTHS: N, fullmode, or transition
@@ -103,22 +105,22 @@ estimate_wetlandmode = function(df, fullmode) {
   # (unless increases immediately follow full flooding)
   tmp_month = df2 |>
     dplyr::group_by(.data$unit, .data$wateryear, .data$month) |>
-    dplyr::mutate(trend = case_when(
+    dplyr::mutate(trend = dplyr::case_when(
                     any(.data$flood_trend %in% c('-', '(-)')) ~ '-',
                     any(.data$flood_trend == '+') ~ '+'
                   )) |>
     dplyr::ungroup() |>
-    dplyr::select(.data$unit, .data$wateryear, .data$month, .data$mode, .data$trend) |>
+    dplyr::select("unit", "wateryear", "month", "mode", "trend") |>
     dplyr::distinct() |>
-    dplyr::mutate(mode_next = lead(.data$mode),
-                  mode_last = lag(.data$mode),
-                  trend_next = lead(.data$trend))
+    dplyr::mutate(mode_next = dplyr::lead(.data$mode),
+                  mode_last = dplyr::lag(.data$mode),
+                  trend_next = dplyr::lead(.data$trend))
   df3 = df2 |>
     # add mode_next and mode_last
-    left_join(tmp_month, by = c('unit', 'wateryear', 'month', 'mode')) |>
+    dplyr::left_join(tmp_month, by = c('unit', 'wateryear', 'month', 'mode')) |>
     dplyr::group_by(.data$unit, .data$wateryear, .data$month_name) |>
     dplyr::mutate(
-      mode = case_when(
+      mode = dplyr::case_when(
         # substantial increase and previous month was already full = still full
         .data$mode == 'transition' &
           any(.data$flood_trend == '+') &
@@ -141,13 +143,13 @@ estimate_wetlandmode = function(df, fullmode) {
   tmp_month3 = df3 |>
     dplyr::select(.data$unit, .data$wateryear, .data$month, .data$mode) |>
     dplyr::distinct() |>
-    dplyr::mutate(mode_next = lead(.data$mode),
-                  mode_last = lag(.data$mode))
-  df4 = df3 |> select(-.data$mode_next, -.data$mode_last) |>
-    left_join(tmp_month3, by = c('unit', 'wateryear', 'month', 'mode')) |>
+    dplyr::mutate(mode_next = dplyr::lead(.data$mode),
+                  mode_last = dplyr::lag(.data$mode))
+  df4 = df3 |> dplyr::select(-.data$mode_next, -.data$mode_last) |>
+    dplyr::left_join(tmp_month3, by = c('unit', 'wateryear', 'month', 'mode')) |>
     dplyr::group_by(.data$unit, .data$wateryear, .data$month_name) |>
     dplyr::mutate(
-      mode = case_when(
+      mode = dplyr::case_when(
         # decrease and last month was full = drawdown
         # (do this after previous step of identifying increases after full = still full)
         .data$mode == 'transition' & any(.data$flood_trend %in% c('-', '(-)')) &
@@ -165,8 +167,8 @@ estimate_wetlandmode = function(df, fullmode) {
   tmp_month4 = df4 |>
     dplyr::select(.data$unit, .data$wateryear, .data$month, .data$mode) |>
     dplyr::distinct() |>
-    dplyr::mutate(mode_next = lead(.data$mode),
-                  mode_last = lag(.data$mode))
+    dplyr::mutate(mode_next = dplyr::lead(.data$mode),
+                  mode_last = dplyr::lag(.data$mode))
   df5 = df4 |>
     dplyr::select(-.data$mode_next, -.data$mode_last) |>
     dplyr::left_join(tmp_month4, by = c('unit', 'wateryear', 'month', 'mode')) |>
@@ -196,14 +198,18 @@ estimate_wetlandmode = function(df, fullmode) {
 
   # finalize/simplify and fix unidentified drawdowns
   res = df5 |>
-    dplyr::group_by(WETLAND, unit, CLASS) |>
-    dplyr::mutate(Acres = max(ObservedAreaHa)*2.47105,
-                  Acres_pq = max(ObservedAreaWaterHa_pq)*2.47105) |>
-    dplyr::group_by(WETLAND, unit, CLASS, Acres, Acres_pq, wateryear, year, month, month_name, mode) |>
-    dplyr::summarize(flood_prop_max = max(flood_prop), .groups = 'drop') |>
-    tidyr::complete(nesting(WETLAND, unit, CLASS, Acres, Acres_pq),
-                    nesting(wateryear, year, month_name, month)) |>
-    dplyr::arrange(unit, wateryear, month_name) |>
+    dplyr::group_by(.data$WETLAND, .data$unit, .data$CLASS) |>
+    dplyr::mutate(Acres = max(.data$ObservedAreaHa)*2.47105,
+                  Acres_pq = max(.data$ObservedAreaWaterHa_pq)*2.47105) |>
+    dplyr::group_by(.data$WETLAND, .data$unit, .data$CLASS, .data$Acres,
+                    .data$Acres_pq, .data$wateryear, .data$year, .data$month,
+                    .data$month_name, .data$mode) |>
+    dplyr::summarize(flood_prop_max = max(.data$flood_prop), .groups = 'drop') |>
+    tidyr::complete(tidyr::nesting(.data$WETLAND, .data$unit, .data$CLASS,
+                                   .data$Acres, .data$Acres_pq),
+                    tidyr::nesting(.data$wateryear, .data$year,
+                                   .data$month_name, .data$month)) |>
+    dplyr::arrange(.data$unit, .data$wateryear, .data$month_name) |>
     dplyr::mutate(
       mode = dplyr::case_when(
         # full but next is irrigation or dry, and no drawdown identified = drawdown

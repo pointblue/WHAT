@@ -39,27 +39,27 @@ generalize_wetlandmode = function(df, fullmode = NULL, clean = FALSE) {
                     .data$Acres_pq, .data$month_name, .data$month) |>
     # frequency/prop of each mode in each month
     dplyr::count(mode) |>
-    dplyr::mutate(total = sum(n),
-                  weight = n / total) |>
+    dplyr::mutate(total = sum(.data$n),
+                  weight = .data$n / .data$total) |>
     dplyr::arrange(mode) |> #sort by factor level = order of importance
     # most frequent: with_ties = FALSE, means if ties, will return first one
-    dplyr::slice_max(n = 1, with_ties = FALSE, order_by = n) |>
+    dplyr::slice_max(n = 1, with_ties = FALSE, order_by = .data$n) |>
     dplyr::ungroup() |>
-    dplyr::select(-total, -n)
+    dplyr::select(-.data$total, -.data$n)
 
   if (clean) {
     df = df |>
       #handle repeat F and D, or lack of F and D
       dplyr::mutate(
         mode = dplyr::case_when(
-          .data$mode == 'D' & lead(.data$mode) == 'D' ~ fullmode,
-          .data$mode == 'F' & lag(.data$mode) == 'F' ~ fullmode,
-          .data$mode == fullmode & lag(.data$mode) == 'N' ~ 'F',
-          .data$mode == fullmode & lead(.data$mode) == 'N' ~ 'D',
+          .data$mode == 'D' & dplyr::lead(.data$mode) == 'D' ~ fullmode,
+          .data$mode == 'F' & dplyr::lag(.data$mode) == 'F' ~ fullmode,
+          .data$mode == fullmode & dplyr::lag(.data$mode) == 'N' ~ 'F',
+          .data$mode == fullmode & dplyr::lead(.data$mode) == 'N' ~ 'D',
           TRUE ~ mode
         )
       ) |>
-      select(-weight)
+      dplyr::select(-.data$weight)
   }
 
   return(df)
