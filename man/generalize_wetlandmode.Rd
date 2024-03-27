@@ -7,7 +7,7 @@
 generalize_wetlandmode(df, fullmode = NULL, clean = FALSE)
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=analyze_watertracker]{analyze_watertracker()}}}
+\item{df}{Input tibble from \code{\link[=estimate_wetlandmode]{estimate_wetlandmode()}}}
 
 \item{fullmode}{One of \code{M} or \code{H}; only necessary if \code{clean = TRUE}; see
 Details}
@@ -38,6 +38,7 @@ function to return multiple months with values for F and D. Setting
 will also remove \code{weight} estimates since they may no longer be valid.
 }
 \examples{
-#format_watertracker(sampledat) |> analyze_watertracker() |> generalize_wetlandmode()
+data(sampledat)
+generalize_wetlandmode(estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat))))
 
 }

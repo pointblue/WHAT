@@ -73,3 +73,7 @@ assumed to reflect noise in the remote sensing data. In addition,
 WaterTracker data are not yet capable of automatically detecting cropped
 status. Values for \code{N} may be changed manually to \code{C} as needed.
 }
+\examples{
+data(sampledat)
+estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat)))
+}

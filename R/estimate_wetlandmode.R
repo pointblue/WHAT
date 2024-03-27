@@ -64,8 +64,9 @@
 #' @importFrom tidyr complete
 #' @importFrom tidyr nesting
 #' @importFrom stringr str_c
-#' @example
-#' #format_watertracker(sampledat) |> estimate_floodstatus() |> estimate_wetlandmode()
+#' @examples
+#' data(sampledat)
+#' estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat)))
 
 estimate_wetlandmode = function(df, fullmode = 'M') {
 

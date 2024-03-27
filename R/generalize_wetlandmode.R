@@ -15,7 +15,7 @@
 #'   `clean=TRUE` will reclassify duplicate values of F and D to `fullmode`, but
 #'   will also remove `weight` estimates since they may no longer be valid.
 #'
-#' @param df Input tibble from [analyze_watertracker()]
+#' @param df Input tibble from [estimate_wetlandmode()]
 #' @param fullmode One of `M` or `H`; only necessary if `clean = TRUE`; see
 #'   Details
 #' @param clean Logical; determines whether to correct for repeat values of F
@@ -29,7 +29,8 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' #format_watertracker(sampledat) |> analyze_watertracker() |> generalize_wetlandmode()
+#' data(sampledat)
+#' generalize_wetlandmode(estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat))))
 #'
 generalize_wetlandmode = function(df, fullmode = NULL, clean = FALSE) {
   df = df |>

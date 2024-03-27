@@ -49,8 +49,9 @@
 #' @export
 #' @importFrom rlang .data
 #' @importFrom purrr map_df
-#' @example
-#' #format_watertracker(sampledat) |> estimate_floodstatus()
+#' @examples
+#' data(sampledat)
+#' estimate_floodstatus(format_watertracker(sampledat))
 
 
 estimate_floodstatus = function(df,

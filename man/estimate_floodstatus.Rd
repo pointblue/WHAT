@@ -71,3 +71,7 @@ Finally the \code{flood_status} on each observation date is then designated as:
 \item \code{dry}: \code{flood_prop} = 0
 }
 }
+\examples{
+data(sampledat)
+estimate_floodstatus(format_watertracker(sampledat))
+}
