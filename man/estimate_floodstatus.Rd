@@ -4,12 +4,18 @@
 \alias{estimate_floodstatus}
 \title{Estimate flooding status}
 \usage{
-estimate_floodstatus(df, prob, delta, full_prop_threshold, wet_prop_threshold)
+estimate_floodstatus(
+  df,
+  prob = 0.95,
+  delta = 0.2,
+  full_prop_threshold = 0.55,
+  wet_prop_threshold = 0.2
+)
 }
 \arguments{
 \item{df}{Input tibble from \code{\link[=format_watertracker]{format_watertracker()}}.}
 
-\item{prob}{Numeric value passed to \code{\link[=quantile]{quantile()}}; see Details.}
+\item{prob}{Single numeric value passed to \code{\link[=quantile]{quantile()}}; see Details.}
 
 \item{delta}{Numeric proportion change representing significant increase or
 decrease in flooding.}
@@ -24,7 +30,10 @@ tibble with added fields: \code{ObservedAreaWater_pq},
 \code{flood_status}
 }
 \description{
-Internal to \code{\link[=analyze_watertracker]{analyze_watertracker()}}. Not meant to be called separately.
+Interprets sequence of Water Tracker data in each unit to interpret flooding
+status (full, wet, trace, or dry) relative to the typical upper limit of
+wetted area, and then whether the change in the extent of flooding from the
+previous observation represents a substantial increase or decrease or not.
 }
 \details{
 For each unit, this function first calculates \code{ObservedAreaWater_pq}
@@ -47,11 +56,11 @@ then calculated (\code{flood_delta}) and categorized (\code{flood_trend}) by
 direction and magnitude of change, based on the input value for \code{delta}
 provided, as:
 \itemize{
-\item \code{+}:  \code{flood_delta} >= \code{delta}
-\item \verb{(+)}: \code{delta} > \code{flood_delta} > 0
+\item \code{INCREASE}:  \code{flood_delta} >= \code{delta}
+\item \code{up}: \code{delta} > \code{flood_delta} > 0
 \item \code{0}: \code{flood_delta} = 0
-\item \verb{(-)}: 0 > \code{flood_delta} > -\code{delta}
-\item \code{-}: -\code{delta} >= \code{flood_delta}
+\item \code{down}: 0 > \code{flood_delta} > -\code{delta}
+\item \code{DECREASE}: -\code{delta} >= \code{flood_delta}
 }
 
 Finally the \code{flood_status} on each observation date is then designated as:

@@ -1,6 +1,9 @@
 #' Estimate flooding status
 #'
-#' Internal to [analyze_watertracker()]. Not meant to be called separately.
+#' Interprets sequence of Water Tracker data in each unit to interpret flooding
+#' status (full, wet, trace, or dry) relative to the typical upper limit of
+#' wetted area, and then whether the change in the extent of flooding from the
+#' previous observation represents a substantial increase or decrease or not.
 #'
 #' @details For each unit, this function first calculates `ObservedAreaWater_pq`
 #'   as a percentile value of 'ObservedAreaWaterHa' (provided in the raw Water
@@ -21,11 +24,11 @@
 #'   then calculated (`flood_delta`) and categorized (`flood_trend`) by
 #'   direction and magnitude of change, based on the input value for `delta`
 #'   provided, as:
-#'   * `+`:  `flood_delta` >= `delta`
-#'   * `(+)`: `delta` > `flood_delta` > 0
+#'   * `INCREASE`:  `flood_delta` >= `delta`
+#'   * `up`: `delta` > `flood_delta` > 0
 #'   * `0`: `flood_delta` = 0
-#'   * `(-)`: 0 > `flood_delta` > -`delta`
-#'   * `-`: -`delta` >= `flood_delta`
+#'   * `down`: 0 > `flood_delta` > -`delta`
+#'   * `DECREASE`: -`delta` >= `flood_delta`
 #'
 #'   Finally the `flood_status` on each observation date is then designated as:
 #'   * `full`: `flood_prop` >= `full_prop_threshold`
@@ -34,7 +37,7 @@
 #'   * `dry`: `flood_prop` = 0
 #'
 #' @param df Input tibble from [format_watertracker()].
-#' @param prob Numeric value passed to [quantile()]; see Details.
+#' @param prob Single numeric value passed to [quantile()]; see Details.
 #' @param delta Numeric proportion change representing significant increase or
 #'   decrease in flooding.
 #' @param full_prop_threshold Numeric value (0-1); see Details.
@@ -43,13 +46,18 @@
 #' @return tibble with added fields: `ObservedAreaWater_pq`,
 #'   `ObservedAreaWater_adjust`, `flood_delta`, `flood_trend`, `flood_prop`, and
 #'   `flood_status`
+#' @export
 #' @importFrom rlang .data
 #' @importFrom purrr map_df
+#' @example
+#' #format_watertracker(sampledat) |> estimate_floodstatus()
 
 
-estimate_floodstatus = function(df, prob, delta,
-                                full_prop_threshold,
-                                wet_prop_threshold) {
+estimate_floodstatus = function(df,
+                                prob = 0.95,
+                                delta = 0.2,
+                                full_prop_threshold = 0.55,
+                                wet_prop_threshold = 0.2) {
   df |>
     split(df$unit) |>
     purrr::map_df(
@@ -64,10 +72,10 @@ estimate_floodstatus = function(df, prob, delta,
               .data$ObservedAreaWaterHa_pq,
               .data$ObservedAreaWaterHa),
             flood_delta = (.data$ObservedAreaWater_adjust - dplyr::lag(.data$ObservedAreaWater_adjust, 1))/.data$ObservedAreaWaterHa_pq,
-            flood_trend = dplyr::case_when(flood_delta <= -delta ~ '-',
-                                           flood_delta < 0 ~ '(-)',
-                                           flood_delta >= delta ~ '+',
-                                           flood_delta > 0 ~ '(+)',
+            flood_trend = dplyr::case_when(flood_delta <= -delta ~ 'DECREASE',
+                                           flood_delta < 0 ~ 'down',
+                                           flood_delta >= delta ~ 'INCREASE',
+                                           flood_delta > 0 ~ 'up',
                                            TRUE ~ '0'))
       }) |>
     dplyr::mutate(
