@@ -16,15 +16,13 @@ considered fully flooded}
 tibble with additional field "mode"
 }
 \description{
-Internal to \code{\link[=analyze_watertracker]{analyze_watertracker()}}. Not meant to be called separately.
-}
-\details{
 Interprets results of \code{\link[=estimate_floodstatus]{estimate_floodstatus()}} to estimate assign monthly
 water management modes for use with the \verb{Wetland Water Budget Tool} a simple
 spread-sheet based tool allowing non-specialists to estimate wetland water
 budgets from a combination of management unit size and schedule of monthly
 operational modes.
-
+}
+\details{
 The sequence of Water Tracker observations for each unit is analyzed
 to interpret monthly operational mode codes, as defined in the Wetland
 Water Budget Tool (WWBT):
@@ -74,7 +72,4 @@ Relatively small fluctuations in the extent of flooding are ignored and
 assumed to reflect noise in the remote sensing data. In addition,
 WaterTracker data are not yet capable of automatically detecting cropped
 status. Values for \code{N} may be changed manually to \code{C} as needed.
-}
-\examples{
-#format_watertracker(sampledat) |> estimate_floodstatus() |> estimate_wetlandmode()
 }

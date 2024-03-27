@@ -1,7 +1,5 @@
 #' Estimate monthly wetland operational modes
 #'
-#' Internal to [analyze_watertracker()]. Not meant to be called separately.
-#'
 #' Interprets results of [estimate_floodstatus()] to estimate assign monthly
 #' water management modes for use with the `Wetland Water Budget Tool` a simple
 #' spread-sheet based tool allowing non-specialists to estimate wetland water
@@ -66,7 +64,7 @@
 #' @importFrom tidyr complete
 #' @importFrom tidyr nesting
 #' @importFrom stringr str_c
-#' @examples
+#' @example
 #' #format_watertracker(sampledat) |> estimate_floodstatus() |> estimate_wetlandmode()
 
 estimate_wetlandmode = function(df, fullmode = 'M') {
