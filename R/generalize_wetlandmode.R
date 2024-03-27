@@ -35,8 +35,9 @@ generalize_wetlandmode = function(df, fullmode = NULL, clean = FALSE) {
   df = df |>
     #set order of importance
     dplyr::mutate(mode = factor(.data$mode, levels = c('F', 'D', 'I', 'M', 'H', 'N'))) |>
-    dplyr::group_by(.data$WETLAND, .data$unit, .data$CLASS, .data$Acres,
-                    .data$Acres_pq, .data$month_name, .data$month) |>
+    dplyr::group_by(.data$WETLAND, .data$unit, .data$CLASS, .data$AREA_HA,
+                    .data$AREA_AC, .data$AREA_AC_WETTED,
+                    .data$month_name, .data$month) |>
     # frequency/prop of each mode in each month
     dplyr::count(mode) |>
     dplyr::mutate(total = sum(.data$n),
