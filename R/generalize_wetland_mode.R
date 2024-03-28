@@ -29,11 +29,11 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' df = format_watertracker(sampledat) |> estimate_floodstatus() |>
-#'    estimate_wetlandmode()
-#' generalize_wetlandmode(df)
+#' df = format_watertracker(sampledat) |> estimate_flood_extent() |>
+#'   estimate_flood_delta() |> estimate_wetland_mode()
+#' generalize_wetland_mode(df)
 #'
-generalize_wetlandmode = function(df, fullmode = NULL, clean = FALSE) {
+generalize_wetland_mode = function(df, fullmode = NULL, clean = FALSE) {
   df = df |>
     #set order of importance
     dplyr::mutate(mode = factor(.data$mode, levels = c('F', 'D', 'I', 'M', 'H', 'N'))) |>

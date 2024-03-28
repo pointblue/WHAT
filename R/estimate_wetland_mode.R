@@ -65,14 +65,14 @@
 #' @importFrom tidyr nesting
 #' @importFrom stringr str_c
 #' @examples
-#' df = format_watertracker(sampledat) |> estimate_floodstatus()
-#' estimate_wetlandmode(df)
+#' df = format_watertracker(sampledat) |> estimate_flood_extent() |> estimate_flood_delta()
+#' estimate_wetland_mode(df)
 
-estimate_wetlandmode = function(df, fullmode = 'M') {
+estimate_wetland_mode = function(df, fullmode = 'M') {
 
   df2 <- df |>
     dplyr::select("unit", "wateryear", "month", "month_name", "obsdate",
-                  "flood_delta":"flood_status") |>
+                  "flood_status", "flood_delta", "flood_trend") |>
     # order matters!
     dplyr::arrange(.data$unit, .data$obsdate) |>
     # recode brief gaps in full flooding as full
