@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 `r badger::badge_repostatus('Active')`
 `r badger::badge_lifecycle(stage = 'stable')`
-<!-- `r badger::badge_doi("10.1111/2041-210X.12628", "yellow")` -->
 `r badger::badge_license()`
 [![R-CMD-check](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml)
+<!-- `r badger::badge_doi("10.1111/2041-210X.12628", "yellow")` -->
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in California’s 
@@ -61,8 +61,8 @@ library(WHAT)
 
 data(sampledat)
 
-dat <- WHAT::format_watertracker(sampledat[sampledat$WETLAND == 'SampleWetland1',]) |> 
-  WHAT::estimate_floodstatus(prob = 0.95)
+dat <- format_watertracker(sampledat[sampledat$WETLAND == 'SampleWetland1',]) |> 
+  estimate_flood_extent(prob = 0.95)
 
 dplyr::select(dat, unit, ObservedAreaWaterHa_pq) |> dplyr::distinct()
 ```
@@ -70,7 +70,7 @@ dplyr::select(dat, unit, ObservedAreaWaterHa_pq) |> dplyr::distinct()
 Interpolate the extent of flooding onto a common set of dates to explore variation across water years (for an individual unit or combinations of units):
 
 ```{r example_interpolate}
-dat_interp = WHAT::interpolate_flooding(
+dat_interp = interpolate_flooding(
   dat[dat$unit == 'SampleWetland1_Unit2',], 
   wateryear = c(2014, 2015, 2016, 2017), 
   interval = 'week')
@@ -88,8 +88,9 @@ ggplot(dat_interp, aes(interval, AreaWater_ac)) +
 Interpret the sequence of WaterTracker observations to detect monthly modes in each unit, and optionally generalize across multiple water years to estimate the general wetland management schedule:
 
 ```{r example_modes}
-WHAT:::estimate_wetlandmode(dat[dat$unit == 'SampleWetland1_Unit2',]) |> 
-  WHAT::generalize_wetlandmode() |> 
+estimate_flood_delta(dat[dat$unit == 'SampleWetland1_Unit2',]) |> 
+  estimate_wetland_mode() |> 
+  generalize_wetland_mode() |> 
   dplyr::select(month_name, mode, weight) |> 
   print(n = 12)
 
@@ -115,4 +116,4 @@ WHAT:::estimate_wetlandmode(dat[dat$unit == 'SampleWetland1_Unit2',]) |>
 
 ## Funding Statement
 
-This package is under development as part of the project "California Central Valley Wetlands Water Budget Tool Development", Grant No. R21AP10037-00, a WaterSMART (Sustain and Manage America's Resources for Tomorrow) Applied Science Grant from the U.S. Bureau of Reclamation.
+This package was originally developed as part of the project "California Central Valley Wetlands Water Budget Tool Development", Grant No. R21AP10037-00, a WaterSMART (Sustain and Manage America's Resources for Tomorrow) Applied Science Grant from the U.S. Bureau of Reclamation.

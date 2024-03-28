@@ -9,10 +9,10 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-<!-- [![](https://img.shields.io/badge/doi-10.1111/2041--210X.12628-yellow.svg)](https://doi.org/10.1111/2041-210X.12628) -->
 [![License: GPL (\>=
 3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL%20(%3E=%203))
 [![R-CMD-check](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml)
+<!-- [![](https://img.shields.io/badge/doi-10.1111/2041--210X.12628-yellow.svg)](https://doi.org/10.1111/2041-210X.12628) -->
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in
@@ -59,8 +59,8 @@ library(WHAT)
 
 data(sampledat)
 
-dat <- WHAT::format_watertracker(sampledat[sampledat$WETLAND == 'SampleWetland1',]) |> 
-  WHAT::estimate_floodstatus(prob = 0.95)
+dat <- format_watertracker(sampledat[sampledat$WETLAND == 'SampleWetland1',]) |> 
+  estimate_flood_extent(prob = 0.95)
 
 dplyr::select(dat, unit, ObservedAreaWaterHa_pq) |> dplyr::distinct()
 #> # A tibble: 9 × 2
@@ -82,7 +82,7 @@ variation across water years (for an individual unit or combinations of
 units):
 
 ``` r
-dat_interp = WHAT::interpolate_flooding(
+dat_interp = interpolate_flooding(
   dat[dat$unit == 'SampleWetland1_Unit2',], 
   wateryear = c(2014, 2015, 2016, 2017), 
   interval = 'week')
@@ -104,8 +104,9 @@ modes in each unit, and optionally generalize across multiple water
 years to estimate the general wetland management schedule:
 
 ``` r
-WHAT:::estimate_wetlandmode(dat[dat$unit == 'SampleWetland1_Unit2',]) |> 
-  WHAT::generalize_wetlandmode() |> 
+estimate_flood_delta(dat[dat$unit == 'SampleWetland1_Unit2',]) |> 
+  estimate_wetland_mode() |> 
+  generalize_wetland_mode() |> 
   dplyr::select(month_name, mode, weight) |> 
   print(n = 12)
 #> # A tibble: 12 × 3
@@ -138,7 +139,7 @@ WHAT:::estimate_wetlandmode(dat[dat$unit == 'SampleWetland1_Unit2',]) |>
 
 ## Funding Statement
 
-This package is under development as part of the project “California
+This package was originally developed as part of the project “California
 Central Valley Wetlands Water Budget Tool Development”, Grant
 No. R21AP10037-00, a WaterSMART (Sustain and Manage America’s Resources
 for Tomorrow) Applied Science Grant from the U.S. Bureau of Reclamation.
