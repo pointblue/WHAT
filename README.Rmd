@@ -16,15 +16,32 @@ knitr::opts_chunk$set(
 # WHAT: Wetland Hydrological Analysis Tools
 
 <!-- badges: start -->
-`r badger::badge_repostatus('Concept')`
-`r badger::badge_lifecycle(stage = 'experimental')`
+`r badger::badge_repostatus('Active')`
+`r badger::badge_lifecycle(stage = 'stable')`
+<!-- `r badger::badge_doi("10.1111/2041-210X.12628", "yellow")` -->
+`r badger::badge_license()`
+[![R-CMD-check](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of WHAT is to support analysis of near real-time hydrological data from
-Point Blue's [Water Tracker](https://www.pointblue.org/watertracker) to
-summarize the timing of operational modes relevant to water use in managed
-wetland units, such as flood-up, maintenance of full ponds, draw-down,
-irrigation, or no water supply.
+WHAT supports estimation of wetland water management schedules in California’s 
+Central Valley through analysis of near-real-time, automated hydrological data 
+from Point Blue's [Water Tracker](https://www.pointblue.org/watertracker). 
+
+Water Tracker uses LandSat satellite imagery to detect open surface water in the 
+Central Valley and estimate the proportion of a given spatial unit that is 
+flooded on a given date. WHAT supports estimating the typical maximum extent of 
+flooding in individual units across multiple water years, variation in the 
+timing and extent of flooding among water years, and estimating the timing of 
+water management schedules, such as floodup and drawdown. 
+
+WHAT is intended for application to spatial units representing individual 
+wetland management units, and provides support for summarizing across multiple 
+units within a larger region, such as a Groundwater Sustainability Plan area. 
+Known and likely wetland management unit boundaries have already been integrated 
+into WaterTracker's automated processing of satellite imagery, to facilitate 
+application of tools in the WHAT package, but hydrological data within custom 
+boundaries can also be requested from WaterTracker by uploading a shapefile or 
+drawing a custom spatial area.
 
 ## Installation
 
@@ -35,14 +52,50 @@ You can install the development version of WHAT from [GitHub](https://github.com
 devtools::install_github("pointblue/WHAT")
 ```
 
-<!-- ## Example -->
+## Examples
 
-<!-- This is a basic example which shows you how to solve a common problem: -->
+Using sample data included, estimate the 95th percentile of the wetted area detected in each wetland management unit over all water years included:
 
-<!-- ```{r example} -->
-<!-- library(WHAT) -->
-<!-- ## basic example code -->
-<!-- ``` -->
+```{r example_floodstatus}
+library(WHAT)
+
+data(sampledat)
+
+dat <- WHAT::format_watertracker(sampledat[sampledat$WETLAND == 'SampleWetland1',]) |> 
+  WHAT::estimate_floodstatus(prob = 0.95)
+
+dplyr::select(dat, unit, ObservedAreaWaterHa_pq) |> dplyr::distinct()
+```
+
+Interpolate the extent of flooding onto a common set of dates to explore variation across water years (for an individual unit or combinations of units):
+
+```{r example_interpolate}
+dat_interp = WHAT::interpolate_flooding(
+  dat[dat$unit == 'SampleWetland1_Unit2',], 
+  wateryear = c(2014, 2015, 2016, 2017), 
+  interval = 'week')
+
+library(ggplot2)
+
+ggplot(dat_interp, aes(interval, AreaWater_ac)) + 
+  geom_line() +
+  facet_wrap(~wateryear, ncol = 1) +
+  scale_x_continuous(breaks = seq(1, 53, 4), 
+                     labels = dat_interp$date[seq(1, 53, 4)] |> format('%b-%d')) +
+  labs(x = NULL, y = 'Acres Flooded')
+```
+
+Interpret the sequence of WaterTracker observations to detect monthly modes in each unit, and optionally generalize across multiple water years to estimate the general wetland management schedule:
+
+```{r example_modes}
+WHAT:::estimate_wetlandmode(dat[dat$unit == 'SampleWetland1_Unit2',]) |> 
+  WHAT::generalize_wetlandmode() |> 
+  dplyr::select(month_name, mode, weight) |> 
+  print(n = 12)
+
+```
+
+
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
 
