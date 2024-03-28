@@ -29,8 +29,9 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' data(sampledat)
-#' generalize_wetlandmode(estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat))))
+#' df = format_watertracker(sampledat) |> estimate_floodstatus() |>
+#'    estimate_wetlandmode()
+#' generalize_wetlandmode(df)
 #'
 generalize_wetlandmode = function(df, fullmode = NULL, clean = FALSE) {
   df = df |>

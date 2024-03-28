@@ -72,6 +72,6 @@ Finally the \code{flood_status} on each observation date is then designated as:
 }
 }
 \examples{
-data(sampledat)
-estimate_floodstatus(format_watertracker(sampledat))
+df = format_watertracker(sampledat)
+estimate_floodstatus(df)
 }

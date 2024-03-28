@@ -54,7 +54,7 @@
 #'   WaterTracker data are not yet capable of automatically detecting cropped
 #'   status. Values for `N` may be changed manually to `C` as needed.
 #'
-#' @param df Input tibble from [format_watertracker()]
+#' @param df Input tibble from [estimate_floodstatus()]
 #' @param fullmode One of `M` or `H`; default operational mode for units
 #'   considered fully flooded
 #'
@@ -65,8 +65,8 @@
 #' @importFrom tidyr nesting
 #' @importFrom stringr str_c
 #' @examples
-#' data(sampledat)
-#' estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat)))
+#' df = format_watertracker(sampledat) |> estimate_floodstatus()
+#' estimate_wetlandmode(df)
 
 estimate_wetlandmode = function(df, fullmode = 'M') {
 

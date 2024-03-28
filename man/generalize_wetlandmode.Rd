@@ -38,7 +38,8 @@ function to return multiple months with values for F and D. Setting
 will also remove \code{weight} estimates since they may no longer be valid.
 }
 \examples{
-data(sampledat)
-generalize_wetlandmode(estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat))))
+df = format_watertracker(sampledat) |> estimate_floodstatus() |>
+   estimate_wetlandmode()
+generalize_wetlandmode(df)
 
 }

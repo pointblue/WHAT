@@ -7,7 +7,7 @@
 estimate_wetlandmode(df, fullmode = "M")
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=format_watertracker]{format_watertracker()}}}
+\item{df}{Input tibble from \code{\link[=estimate_floodstatus]{estimate_floodstatus()}}}
 
 \item{fullmode}{One of \code{M} or \code{H}; default operational mode for units
 considered fully flooded}
@@ -74,6 +74,6 @@ WaterTracker data are not yet capable of automatically detecting cropped
 status. Values for \code{N} may be changed manually to \code{C} as needed.
 }
 \examples{
-data(sampledat)
-estimate_wetlandmode(estimate_floodstatus(format_watertracker(sampledat)))
+df = format_watertracker(sampledat) |> estimate_floodstatus()
+estimate_wetlandmode(df)
 }
