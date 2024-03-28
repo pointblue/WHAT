@@ -39,5 +39,5 @@ across all units for each unique date to return the total area flooded.
 }
 \examples{
 df = estimate_floodstatus(format_watertracker(sampledat))
-interpolate_flooding(df, wateryear = c(2015, 2016), interval = 'week')
+interpolate_flooding(df, wateryear = c(2015, 2016))
 }

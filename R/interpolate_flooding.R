@@ -31,15 +31,16 @@
 #'
 #' @examples
 #' df = estimate_floodstatus(format_watertracker(sampledat))
-#' interpolate_flooding(df, wateryear = c(2015, 2016), interval = 'week')
+#' interpolate_flooding(df, wateryear = c(2015, 2016))
 
 interpolate_flooding = function(df, interval = 'week', wateryear, sum = FALSE) {
 
   sq = purrr::map(
     wateryear,
     function(x) {
-      sq = seq(as.Date(paste(x - 1, '10', '01', sep = '-')),
-               as.Date(paste(x, '09', '30', sep = '-')), by = interval)
+      sq = seq.Date(
+        as.Date(paste(x - 1, '10', '01', sep = '-')),
+        as.Date(paste(x, '09', '30', sep = '-')), by = interval)
 
       if (lubridate::leap_year(x) & interval %in% c('day', 'week')) {
         sq = dplyr::tibble(sq) |>
@@ -51,12 +52,17 @@ interpolate_flooding = function(df, interval = 'week', wateryear, sum = FALSE) {
       return(as.character(sq))
     }) |> unlist()
 
+  n_interval = length(
+    seq.Date(as.Date(paste(wateryear[1] - 1, '10', '01', sep = '-')),
+             as.Date(paste(wateryear[1], '09', '30', sep = '-')), by = interval))
+
   res = df |>
     split(df$unit) |>
     purrr::map_df(
       ~zoo::zoo(.x$ObservedAreaWater_adjust, order.by = .x$obsdate) |>
         zoo::na.spline(x = as.Date, xout = as.Date(sq), na.rm = FALSE) |>
-        tibble::as_tibble(rownames = 'date'),
+        tibble::as_tibble(rownames = 'date') |>
+        dplyr::mutate(interval = rep(c(1:n_interval), length(wateryear))),
       .id = 'unit') |>
     dplyr::mutate(
       value = dplyr::if_else(.data$value < 0, 0, .data$value),
@@ -67,12 +73,12 @@ interpolate_flooding = function(df, interval = 'week', wateryear, sum = FALSE) {
                                  .data$year + 1, .data$year),
       AreaWater_ha = .data$value,
       AreaWater_ac = .data$AreaWater_ha * 2.47105) |>
-    dplyr::select('wateryear', 'year', 'month', 'date', 'AreaWater_ha',
-                  'AreaWater_ac')
+    dplyr::select('wateryear', 'year', 'month', 'date', 'interval',
+                  'AreaWater_ha', 'AreaWater_ac')
 
   if (sum) {
     res = res |>
-      dplyr::group_by(.data$wateryear, .data$year, .data$month, .data$date) |>
+      dplyr::group_by(.data$wateryear, .data$year, .data$month, .data$date, .data$interval) |>
       dplyr::summarize(AreaWater_ha = sum(.data$AreaWater_ha, na.rm = TRUE),
                        AreaWater_ac = .data$AreaWater_ha * 2.47105,
                        .groups = 'drop')
