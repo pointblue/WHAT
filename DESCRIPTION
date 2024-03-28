@@ -1,14 +1,12 @@
 Package: WHAT
-Title: Wetland Hydrological Analysis Tool
+Title: Wetland Hydrological Analysis Tools
 Version: 0.0.0.9000
 Authors@R: 
     person("Kristen", "Dybala", , "kdybala@pointblue.org", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2787-4600"))
-Description: Supports analysis of near real-time hydrological data from
-    Point Blue's [Water Tracker](https://www.pointblue.org/watertracker)
-    to summarize the timing of operational modes relevant to water use in
-    managed wetland units, such as flood-up, maintenance of full ponds,
-    draw-down, irrigation, or no water supply.
+Description: Supports estimation of wetland water management schedules in 
+    California’s Central Valley through analysis of near-real-time, automated 
+    hydrological data from Point Blue's Water Tracker.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
