@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 `r badger::badge_lifecycle(stage = 'stable')`
 `r badger::badge_license()`
 `r badger::badge_github_actions()`
+[![DOI](https://zenodo.org/badge/679839985.svg)](https://zenodo.org/doi/10.5281/zenodo.10895876)
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in California’s 

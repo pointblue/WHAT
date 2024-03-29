@@ -13,6 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL%20(%3E=%203))
 [![R build
 status](https://github.com/pointblue/WHAT/workflows/R-CMD-check/badge.svg)](https://github.com/pointblue/WHAT/actions)
+[![DOI](https://zenodo.org/badge/679839985.svg)](https://zenodo.org/doi/10.5281/zenodo.10895876)
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in
