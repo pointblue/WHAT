@@ -11,7 +11,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: GPL (\>=
 3)](https://img.shields.io/badge/license-GPL%20(%3E=%203)-blue.svg)](https://cran.r-project.org/web/licenses/GPL%20(%3E=%203))
-[![R-CMD-check](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml)
+[![R build
+status](https://github.com/pointblue/WHAT/workflows/R-CMD-check/badge.svg)](https://github.com/pointblue/WHAT/actions)
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in

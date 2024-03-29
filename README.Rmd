@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 `r badger::badge_repostatus('Active')`
 `r badger::badge_lifecycle(stage = 'stable')`
 `r badger::badge_license()`
-[![R-CMD-check](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pointblue/WHAT/actions/workflows/R-CMD-check.yaml)
+`r badger::badge_github_actions()`
 <!-- badges: end -->
 
 WHAT supports estimation of wetland water management schedules in California’s 
