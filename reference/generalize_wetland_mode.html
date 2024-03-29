@@ -57,7 +57,7 @@ data</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>df</dt>
-<dd><p>Input tibble from <code>estimate_wetlandmode()</code></p></dd>
+<dd><p>Input tibble from <code><a href="estimate_wetland_mode.html">estimate_wetland_mode()</a></code></p></dd>
 
 
 <dt>fullmode</dt>
@@ -86,7 +86,7 @@ in which that mode was detected. Low values for weight reflect months with
 more annual variability in the monthly management schedules.</p>
 <p>Note that ties are not returned, and in the case of ties, the function
 favors returning modes in the following order: F, D, I, M, H, N (see
-<code>estimate_wetlandmode()</code> for details). It is therefore possible for the
+<code><a href="estimate_wetland_mode.html">estimate_wetland_mode()</a></code> for details). It is therefore possible for the
 function to return multiple months with values for F and D. Setting
 <code>clean=TRUE</code> will reclassify duplicate values of F and D to <code>fullmode</code>, but
 will also remove <code>weight</code> estimates since they may no longer be valid.</p>
