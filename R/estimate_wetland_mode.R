@@ -1,6 +1,6 @@
 #' Estimate monthly wetland operational modes
 #'
-#' Interprets results of [estimate_floodstatus()] to estimate assign monthly
+#' Interprets results of [estimate_flood_delta()] to estimate assign monthly
 #' water management modes for use with the `Wetland Water Budget Tool` a simple
 #' spread-sheet based tool allowing non-specialists to estimate wetland water
 #' budgets from a combination of management unit size and schedule of monthly
@@ -17,7 +17,7 @@
 #'   * N (no water supply): no water added to the unit, though water may be present from management in prior months (e.g., drawdown still in progress)
 #'   * C (cropped): no water supply, but actively growing vegetation is removing water from the soil through evapotranspiration
 #'
-#'   Using the output from [estimate_floodstatus()], the function first
+#'   Using the output from [estimate_flood_delta()], the function first
 #'   identifies months in which the `flood_status` of all observations is
 #'   "full", interpreted as M or H depending on the `fullmode` provided, or
 #'   "dry", interpreted as N. Months in which observations differ in the extent
@@ -54,7 +54,7 @@
 #'   WaterTracker data are not yet capable of automatically detecting cropped
 #'   status. Values for `N` may be changed manually to `C` as needed.
 #'
-#' @param df Input tibble from [estimate_floodstatus()]
+#' @param df Input tibble from [estimate_flood_delta()]
 #' @param fullmode One of `M` or `H`; default operational mode for units
 #'   considered fully flooded
 #'

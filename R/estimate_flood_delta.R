@@ -14,7 +14,7 @@
 #'   * `down`: 0 > `flood_delta` > -`delta`
 #'   * `DECREASE`: -`delta` >= `flood_delta`
 #'
-#' @param df Input tibble from [format_watertracker()].
+#' @param df Input tibble from [estimate_flood_extent()].
 #' @param delta Numeric proportion change representing significant increase or
 #'   decrease in flooding.
 #'

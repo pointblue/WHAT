@@ -7,7 +7,7 @@
 interpolate_flooding(df, interval = "week", wateryear, sum = FALSE)
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=estimate_floodstatus]{estimate_floodstatus()}}}
+\item{df}{Input tibble from \code{\link[=estimate_flood_extent]{estimate_flood_extent()}}}
 
 \item{interval}{one of "day", "week", "month", "quarter" or "year"; see
 \code{\link[=seq.Date]{seq.Date()}}}
@@ -21,12 +21,12 @@ tibble with fields: \code{date}, \code{year}, \code{month}, \code{wateryear},
 \code{AreaWater_ha}, and \code{AreaWater_ac}
 }
 \description{
-Interpolate adjusted estimates of flooded area from \code{\link[=estimate_floodstatus]{estimate_floodstatus()}}
+Interpolate adjusted estimates of flooded area from \code{\link[=estimate_flood_extent]{estimate_flood_extent()}}
 to cover specific dates, facilitating a sum across multiple units.
 }
 \details{
 For each unit, this function interpolates values of
-\code{ObservedAreaWater_adjust} generated form \code{\link[=estimate_floodstatus]{estimate_floodstatus()}} across a
+\code{ObservedAreaWater_adjust} generated form \code{\link[=estimate_flood_extent]{estimate_flood_extent()}} across a
 desired water years. For each water year, the sequence of dates to
 interpolate is first generated from Oct 1 through Sep 30 at the desired
 interval. For intervals of weeks or days in leap years, leap day is
@@ -38,6 +38,6 @@ than zero are changed to zero. Optionally, if \code{sum = TRUE}, summarizes
 across all units for each unique date to return the total area flooded.
 }
 \examples{
-df = estimate_floodstatus(format_watertracker(sampledat))
+df = format_watertracker(sampledat)) |> estimate_flood_extent()
 interpolate_flooding(df, wateryear = c(2015, 2016))
 }

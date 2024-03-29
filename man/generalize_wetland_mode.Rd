@@ -7,7 +7,7 @@
 generalize_wetland_mode(df, fullmode = NULL, clean = FALSE)
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=estimate_wetlandmode]{estimate_wetlandmode()}}}
+\item{df}{Input tibble from \code{\link[=estimate_wetland_mode]{estimate_wetland_mode()}}}
 
 \item{fullmode}{One of \code{M} or \code{H}; only necessary if \code{clean = TRUE}; see
 Details}
@@ -32,7 +32,7 @@ more annual variability in the monthly management schedules.
 
 Note that ties are not returned, and in the case of ties, the function
 favors returning modes in the following order: F, D, I, M, H, N (see
-\code{\link[=estimate_wetlandmode]{estimate_wetlandmode()}} for details). It is therefore possible for the
+\code{\link[=estimate_wetland_mode]{estimate_wetland_mode()}} for details). It is therefore possible for the
 function to return multiple months with values for F and D. Setting
 \code{clean=TRUE} will reclassify duplicate values of F and D to \code{fullmode}, but
 will also remove \code{weight} estimates since they may no longer be valid.

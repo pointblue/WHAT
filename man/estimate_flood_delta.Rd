@@ -7,7 +7,7 @@
 estimate_flood_delta(df, delta = 0.2)
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=format_watertracker]{format_watertracker()}}.}
+\item{df}{Input tibble from \code{\link[=estimate_flood_extent]{estimate_flood_extent()}}.}
 
 \item{delta}{Numeric proportion change representing significant increase or
 decrease in flooding.}

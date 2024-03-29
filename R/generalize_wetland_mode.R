@@ -10,12 +10,12 @@
 #'
 #'   Note that ties are not returned, and in the case of ties, the function
 #'   favors returning modes in the following order: F, D, I, M, H, N (see
-#'   [estimate_wetlandmode()] for details). It is therefore possible for the
+#'   [estimate_wetland_mode()] for details). It is therefore possible for the
 #'   function to return multiple months with values for F and D. Setting
 #'   `clean=TRUE` will reclassify duplicate values of F and D to `fullmode`, but
 #'   will also remove `weight` estimates since they may no longer be valid.
 #'
-#' @param df Input tibble from [estimate_wetlandmode()]
+#' @param df Input tibble from [estimate_wetland_mode()]
 #' @param fullmode One of `M` or `H`; only necessary if `clean = TRUE`; see
 #'   Details
 #' @param clean Logical; determines whether to correct for repeat values of F

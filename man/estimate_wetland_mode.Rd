@@ -7,7 +7,7 @@
 estimate_wetland_mode(df, fullmode = "M")
 }
 \arguments{
-\item{df}{Input tibble from \code{\link[=estimate_floodstatus]{estimate_floodstatus()}}}
+\item{df}{Input tibble from \code{\link[=estimate_flood_delta]{estimate_flood_delta()}}}
 
 \item{fullmode}{One of \code{M} or \code{H}; default operational mode for units
 considered fully flooded}
@@ -16,7 +16,7 @@ considered fully flooded}
 tibble with additional field "mode"
 }
 \description{
-Interprets results of \code{\link[=estimate_floodstatus]{estimate_floodstatus()}} to estimate assign monthly
+Interprets results of \code{\link[=estimate_flood_delta]{estimate_flood_delta()}} to estimate assign monthly
 water management modes for use with the \verb{Wetland Water Budget Tool} a simple
 spread-sheet based tool allowing non-specialists to estimate wetland water
 budgets from a combination of management unit size and schedule of monthly
@@ -36,7 +36,7 @@ Water Budget Tool (WWBT):
 \item C (cropped): no water supply, but actively growing vegetation is removing water from the soil through evapotranspiration
 }
 
-Using the output from \code{\link[=estimate_floodstatus]{estimate_floodstatus()}}, the function first
+Using the output from \code{\link[=estimate_flood_delta]{estimate_flood_delta()}}, the function first
 identifies months in which the \code{flood_status} of all observations is
 "full", interpreted as M or H depending on the \code{fullmode} provided, or
 "dry", interpreted as N. Months in which observations differ in the extent

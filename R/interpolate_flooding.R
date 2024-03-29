@@ -1,10 +1,10 @@
 #' Interpolate flooding
 #'
-#' Interpolate adjusted estimates of flooded area from [estimate_floodstatus()]
+#' Interpolate adjusted estimates of flooded area from [estimate_flood_extent()]
 #' to cover specific dates, facilitating a sum across multiple units.
 #'
 #' @details For each unit, this function interpolates values of
-#'   `ObservedAreaWater_adjust` generated form [estimate_floodstatus()] across a
+#'   `ObservedAreaWater_adjust` generated form [estimate_flood_extent()] across a
 #'   desired water years. For each water year, the sequence of dates to
 #'   interpolate is first generated from Oct 1 through Sep 30 at the desired
 #'   interval. For intervals of weeks or days in leap years, leap day is
@@ -15,7 +15,7 @@
 #'   than zero are changed to zero. Optionally, if `sum = TRUE`, summarizes
 #'   across all units for each unique date to return the total area flooded.
 #'
-#' @param df Input tibble from [estimate_floodstatus()]
+#' @param df Input tibble from [estimate_flood_extent()]
 #' @param interval one of "day", "week", "month", "quarter" or "year"; see
 #'   [seq.Date()]
 #' @param wateryear numeric; water years to interpolate over
@@ -30,7 +30,7 @@
 #' @importFrom tibble deframe
 #'
 #' @examples
-#' df = estimate_floodstatus(format_watertracker(sampledat))
+#' df = format_watertracker(sampledat)) |> estimate_flood_extent()
 #' interpolate_flooding(df, wateryear = c(2015, 2016))
 
 interpolate_flooding = function(df, interval = 'week', wateryear, sum = FALSE) {
