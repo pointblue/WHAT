@@ -30,7 +30,7 @@
 #' @importFrom tibble deframe
 #'
 #' @examples
-#' df = format_watertracker(sampledat)) |> estimate_flood_extent()
+#' df = format_watertracker(sampledat) |> estimate_flood_extent()
 #' interpolate_flooding(df, wateryear = c(2015, 2016))
 
 interpolate_flooding = function(df, interval = 'week', wateryear, sum = FALSE) {

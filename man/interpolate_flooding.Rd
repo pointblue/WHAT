@@ -38,6 +38,6 @@ than zero are changed to zero. Optionally, if \code{sum = TRUE}, summarizes
 across all units for each unique date to return the total area flooded.
 }
 \examples{
-df = format_watertracker(sampledat)) |> estimate_flood_extent()
+df = format_watertracker(sampledat) |> estimate_flood_extent()
 interpolate_flooding(df, wateryear = c(2015, 2016))
 }
